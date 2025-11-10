@@ -1,0 +1,140 @@
+/* src/styles/Leaderboard.css */
+.leaderboard {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.leaderboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.leaderboard-header h1 {
+    color: #2d3748;
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.leaderboard-header p {
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.leaderboard-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.leaderboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.leaderboard-card.current-user {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #fff, #f7fafc);
+    position: relative;
+}
+
+.leaderboard-card.current-user::before {
+    content: "You";
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #667eea;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.rank-position {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 80px;
+}
+
+.rank-icon {
+    font-size: 2rem;
+}
+
+.rank-number {
+    font-size: 0.875rem;
+    color: #718096;
+    font-weight: 600;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-name {
+    color: #2d3748;
+    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
+}
+
+.user-rank {
+    color: #667eea;
+    font-size: 0.875rem;
+    font-weight: 600;
+    background: #edf2f7;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+}
+
+.user-stats {
+    text-align: right;
+}
+
+.points-amount {
+    color: #2d3748;
+    font-size: 1.25rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.recycling-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat {
+    font-size: 0.875rem;
+    color: #718096;
+}
+
+@media (max-width: 640px) {
+    .leaderboard-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .user-stats {
+        text-align: center;
+    }
+
+    .rank-position {
+        flex-direction: row;
+        gap: 1rem;
+    }
+}

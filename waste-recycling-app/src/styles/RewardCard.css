@@ -1,0 +1,86 @@
+/* src/styles/RewardCard.css */
+.reward-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border: 2px solid #e2e8f0;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.reward-card.available {
+    border-color: #e2e8f0;
+}
+
+.reward-card.available:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    border-color: #48bb78;
+}
+
+.reward-card.locked {
+    opacity: 0.7;
+    background: #f7fafc;
+}
+
+.reward-image {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.reward-title {
+    color: #2d3748;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.reward-description {
+    color: #718096;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.reward-cost {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #4a5568;
+}
+
+.cost-amount {
+    font-weight: bold;
+    color: #48bb78;
+}
+
+.redeem-btn {
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.redeem-btn.available {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+}
+
+.redeem-btn.available:hover {
+    background: linear-gradient(135deg, #38a169, #2f855a);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(72, 187, 120, 0.3);
+}
+
+.redeem-btn.disabled {
+    background: #cbd5e0;
+    color: #718096;
+    cursor: not-allowed;
+}
