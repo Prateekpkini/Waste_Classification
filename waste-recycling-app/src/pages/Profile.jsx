@@ -7,6 +7,9 @@ function Profile() {
     const { user, updateProfile } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({ ...user });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -16,14 +19,31 @@ function Profile() {
         }));
     };
 
-    const handleSave = () => {
-        updateProfile(formData);
-        setIsEditing(false);
+    const handleSave = async () => {
+        setLoading(true);
+        setError('');
+        setMessage('');
+
+        // Only send fields that exist in the 'profiles' table
+        const { name, gender, country, date_of_birth, phone } = formData;
+        const profileUpdates = { name, gender, country, date_of_birth, phone };
+
+        try {
+            await updateProfile(profileUpdates);
+            setMessage('Profile updated successfully!');
+            setIsEditing(false);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleCancel = () => {
         setFormData({ ...user });
         setIsEditing(false);
+        setError('');
+        setMessage('');
     };
 
     return (
@@ -39,8 +59,8 @@ function Profile() {
                     </button>
                 ) : (
                     <div className="edit-actions">
-                        <button className="save-btn" onClick={handleSave}>
-                            Save Changes
+                        <button className="save-btn" onClick={handleSave} disabled={loading}>
+                            {loading ? 'Saving...' : 'Save Changes'}
                         </button>
                         <button className="cancel-btn" onClick={handleCancel}>
                             Cancel
@@ -48,6 +68,9 @@ function Profile() {
                     </div>
                 )}
             </div>
+
+            {error && <div className="error-message">{error}</div>}
+            {message && <div className="success-message">{message}</div>}
 
             <div className="profile-content">
                 <div className="profile-card">
@@ -59,7 +82,7 @@ function Profile() {
                                 <input
                                     type="text"
                                     name="name"
-                                    value={formData.name}
+                                    value={formData.name || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
@@ -69,16 +92,7 @@ function Profile() {
 
                         <div className="info-group">
                             <label>Email</label>
-                            {isEditing ? (
-                                <input
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                />
-                            ) : (
-                                <p>{user.email}</p>
-                            )}
+                            <p>{user.email}</p>
                         </div>
 
                         <div className="info-group">
@@ -86,7 +100,7 @@ function Profile() {
                             {isEditing ? (
                                 <select
                                     name="gender"
-                                    value={formData.gender}
+                                    value={formData.gender || 'Other'}
                                     onChange={handleInputChange}
                                 >
                                     <option value="Male">Male</option>
@@ -104,7 +118,7 @@ function Profile() {
                                 <input
                                     type="text"
                                     name="country"
-                                    value={formData.country}
+                                    value={formData.country || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
@@ -117,12 +131,12 @@ function Profile() {
                             {isEditing ? (
                                 <input
                                     type="date"
-                                    name="dateOfBirth"
-                                    value={formData.dateOfBirth}
+                                    name="date_of_birth"
+                                    value={formData.date_of_birth || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
-                                <p>{user.dateOfBirth}</p>
+                                <p>{user.date_of_birth}</p>
                             )}
                         </div>
 
@@ -132,7 +146,7 @@ function Profile() {
                                 <input
                                     type="tel"
                                     name="phone"
-                                    value={formData.phone}
+                                    value={formData.phone || ''}
                                     onChange={handleInputChange}
                                 />
                             ) : (
@@ -150,15 +164,15 @@ function Profile() {
                             <span className="stat-label">Total Points</span>
                         </div>
                         <div className="stat-item">
-                            <span className="stat-value">{user.plasticRecycled}</span>
+                            <span className="stat-value">{user.plastic_recycled}</span>
                             <span className="stat-label">Plastic Items</span>
                         </div>
                         <div className="stat-item">
-                            <span className="stat-value">{user.metalRecycled}</span>
+                            <span className="stat-value">{user.metal_recycled}</span>
                             <span className="stat-label">Metal Items</span>
                         </div>
                         <div className="stat-item">
-                            <span className="stat-value">{user.plasticRecycled + user.metalRecycled}</span>
+                            <span className="stat-value">{user.plastic_recycled + user.metal_recycled}</span>
                             <span className="stat-label">Total Recycled</span>
                         </div>
                     </div>

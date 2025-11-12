@@ -1,5 +1,6 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 
 const AuthContext = createContext();
 
@@ -16,51 +17,89 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if user is logged in from localStorage
-        const savedUser = localStorage.getItem('recyclingUser');
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
-        }
-        setLoading(false);
-    }, []);
-
-    const login = (email, password) => {
-        // Mock authentication
-        const mockUser = {
-            id: 1,
-            name: 'TEJAS TANDEL',
-            email: 'Tejastandel2004@gmail.com',
-            gender: 'Male',
-            country: 'India',
-            dateOfBirth: '2004-04-19',
-            phone: '+918618305147',
-            points: 750,
-            plasticRecycled: 100,
-            metalRecycled: 90,
-            rank: 'Veteran Recycler'
+        const fetchSession = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                setUser({ ...session.user, ...profile });
+            }
+            setLoading(false);
         };
 
-        if (email === mockUser.email && password === 'password') {
-            setUser(mockUser);
-            localStorage.setItem('recyclingUser', JSON.stringify(mockUser));
-            return true;
-        }
-        return false;
+        fetchSession();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+            async (_event, session) => {
+                if (session) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('*')
+                        .eq('id', session.user.id)
+                        .single();
+                    
+                    setUser({ ...session.user, ...profile });
+                } else {
+                    setUser(null);
+                }
+                setLoading(false);
+            }
+        );
+
+        return () => {
+            subscription?.unsubscribe();
+        };
+    }, []);
+
+    const login = async (email, password) => {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
     };
 
-    const logout = () => {
+    const signUp = async (name, email, password) => {
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    name: name,
+                }
+            }
+        });
+        if (error) throw error;
+        return data;
+    };
+
+    const logout = async () => {
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
         setUser(null);
-        localStorage.removeItem('recyclingUser');
     };
 
-    const updateProfile = (updatedUser) => {
-        setUser(updatedUser);
-        localStorage.setItem('recyclingUser', JSON.stringify(updatedUser));
+    const updateProfile = async (updatedFields) => {
+        if (!user) throw new Error("No user is logged in.");
+
+        const { data, error } = await supabase
+            .from('profiles')
+            .update(updatedFields)
+            .eq('id', user.id)
+            .select()
+            .single();
+
+        if (error) throw error;
+
+        setUser(prevUser => ({ ...prevUser, ...data }));
+        return data;
     };
 
     const value = {
         user,
         login,
+        signUp,
         logout,
         updateProfile
     };

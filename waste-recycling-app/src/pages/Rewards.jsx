@@ -1,11 +1,12 @@
 // src/pages/Rewards.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import RewardCard from '../components/RewardCard';
 import '../styles/Rewards.css';
 
 function Rewards() {
-    const { user } = useAuth();
+    const { user, updateProfile } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     const rewards = [
         {
@@ -31,13 +32,22 @@ function Rewards() {
         }
     ];
 
-    const handleRedeem = (reward) => {
+    const handleRedeem = async (reward) => {
+        if (loading) return;
+        setLoading(true);
+
         if (user.points >= reward.cost) {
             const newPoints = user.points - reward.cost;
-            alert(`Congratulations! You redeemed ${reward.title} for ${reward.cost} points. Your new balance is ${newPoints} points.`);
+            try {
+                await updateProfile({ points: newPoints });
+                alert(`Congratulations! You redeemed ${reward.title} for ${reward.cost} points. Your new balance is ${newPoints} points.`);
+            } catch (error) {
+                alert(`Redemption failed: ${error.message}`);
+            }
         } else {
             alert(`You need ${reward.cost - user.points} more points to redeem this reward. Keep recycling!`);
         }
+        setLoading(false);
     };
 
     return (

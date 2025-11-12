@@ -1,8 +1,9 @@
-// src/App.jsx
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
+import SignUp from './pages/SignUp'; // Import the new SignUp page
 import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Leaderboard from './pages/Leaderboard';
@@ -22,6 +23,7 @@ function App() {
         <div className="App">
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} /> {/* Add the sign-up route */}
             <Route path="/" element={
               <ProtectedRoute>
                 <Navbar />

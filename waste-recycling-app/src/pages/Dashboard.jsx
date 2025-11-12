@@ -60,14 +60,14 @@ function Dashboard() {
                 <div className="recycling-stats">
                     <div className="stat-card">
                         <h4>♻️ Plastic Recycling</h4>
-                        <p><strong>Items Recycled:</strong> {user.plasticRecycled} plastic bottles</p>
-                        <p><strong>Points Earned:</strong> {user.plasticRecycled * 5}</p>
+                        <p><strong>Items Recycled:</strong> {user.plastic_recycled} plastic bottles</p>
+                        <p><strong>Points Earned:</strong> {user.plastic_recycled * 5}</p>
                     </div>
 
                     <div className="stat-card">
                         <h4>🔩 Metal Recycling</h4>
-                        <p><strong>Items Recycled:</strong> {user.metalRecycled} metal cans</p>
-                        <p><strong>Points Earned:</strong> {user.metalRecycled * 5}</p>
+                        <p><strong>Items Recycled:</strong> {user.metal_recycled} metal cans</p>
+                        <p><strong>Points Earned:</strong> {user.metal_recycled * 5}</p>
                     </div>
                 </div>
             </div>
