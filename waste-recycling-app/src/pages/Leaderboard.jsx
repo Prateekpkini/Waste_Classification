@@ -1,11 +1,8 @@
 // src/pages/Leaderboard.jsx
 import React from 'react';
-import { useAuth } from '../context/AuthContext';
 import '../styles/Leaderboard.css';
 
 function Leaderboard() {
-    const { user } = useAuth();
-
     const topRecyclers = [
         {
             id: 1,
